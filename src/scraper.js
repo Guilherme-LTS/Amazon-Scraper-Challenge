@@ -7,9 +7,11 @@ export async function scrapeAmazon(keyword) {
 
   // 1. INICIALIZAÇÃO DO NAVEGADOR
   // Usamos um bloco try...finally para garantir que o navegador sempre fechará
-  const browser = await chromium.launch({ headless: true }); // headless: true para rodar em segundo plano
+    const browser = await chromium.launch({ headless: false });
   try {
-    const page = await browser.newPage();
+    const page = await browser.newPage({
+        userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36'
+    });
     const searchURL = `https://www.amazon.com.br/s?k=${encodeURIComponent(keyword)}`;
     
     // 2. NAVEGAÇÃO
