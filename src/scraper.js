@@ -20,6 +20,9 @@ export async function scrapeAmazon(keyword) {
       },
     });
 
+    fs.writeFileSync('amazon_response.html', response.data);
+    console.log('HTML da resposta salvo em amazon_response.html');
+
     // 2. Analisa o HTML da página usando JSDOM
     const dom = new JSDOM(response.data);
     const document = dom.window.document;

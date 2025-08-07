@@ -1,5 +1,5 @@
 import express from 'express';
-import { scrapeAmazon } from './scraper.js'; // <-- Importamos nossa função
+import { scrapeAmazon } from './scraper.js'; // <-- Importamos a função
 
 // 1. Inicialização
 const app = express();
