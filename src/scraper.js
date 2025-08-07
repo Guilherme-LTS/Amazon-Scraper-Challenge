@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { JSDOM } from 'jsdom';
+import fs from 'fs';
 
 // A função principal que fará o scraping
 export async function scrapeAmazon(keyword) {
