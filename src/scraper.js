@@ -5,34 +5,28 @@ export async function scrapeAmazon(keyword) {
     throw new Error('Palavra-chave não pode ser vazia');
   }
 
-  // 1. INICIALIZAÇÃO DO NAVEGADOR
-  // Usamos um bloco try...finally para garantir que o navegador sempre fechará
-    const browser = await chromium.launch({ headless: false });
+  // Usaremos headless: false para assistir à mágica, depois mudamos para true.
+  const browser = await chromium.launch({ headless: false }); 
   try {
     const page = await browser.newPage({
-        userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36'
+      userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36'
     });
-    const searchURL = `https://www.amazon.com.br/s?k=${encodeURIComponent(keyword)}`;
     
-    // 2. NAVEGAÇÃO
+    const searchURL = `https://www.amazon.com.br/s?k=${encodeURIComponent(keyword)}`;
     await page.goto(searchURL, { waitUntil: 'domcontentloaded' });
-
-    // 3. ESPERA INTELIGENTE
-    // Esperamos que o seletor do produto apareça na página (até 15 segundos)
-    // Esta é a etapa que o JSDOM não conseguia fazer: esperar o JS da página rodar.
     await page.waitForSelector('div[data-asin]', { timeout: 15000 });
 
-    // 4. EXTRAÇÃO DE DADOS COM LOCATORS DO PLAYWRIGHT
     const productElements = await page.locator('div[data-asin]').all();
     const products = [];
 
     for (const element of productElements) {
-      // Usamos try-catch para cada item para que um produto com HTML quebrado não pare todo o scraping
       try {
-        const title = await element.locator('h2 a.a-link-normal span.a-text-normal').textContent();
+        // --- SELETORES INTERNOS ATUALIZADOS ---
+        // Título: Buscando por uma classe mais comum e estável para o título.
+        const title = await element.locator('span.a-size-base-plus.a-color-base.a-text-normal, span.a-size-medium.a-color-base.a-text-normal').first().textContent({ timeout: 5000 });
+
         const imageUrl = await element.locator('img.s-image').getAttribute('src');
         
-        // Extração de dados que podem não existir (avaliação e reviews)
         let rating = 0;
         if (await element.locator('.a-icon-alt').count() > 0) {
           const ratingText = await element.locator('.a-icon-alt').first().textContent();
@@ -49,8 +43,7 @@ export async function scrapeAmazon(keyword) {
           products.push({ title, rating, numReviews, imageUrl });
         }
       } catch (e) {
-        // Ignora erros em um único produto e continua o loop
-        console.log(`Pulando um produto devido a um erro de extração: ${e.message}`);
+        // console.log(`Pulando um produto. Erro: ${e.message}`);
       }
     }
 
@@ -60,8 +53,6 @@ export async function scrapeAmazon(keyword) {
     console.error('Erro durante o scraping com Playwright:', error);
     throw new Error('Falha ao obter dados da Amazon com Playwright.');
   } finally {
-    // 5. FECHAMENTO DO NAVEGADOR
-    // Essencial para não deixar processos abertos consumindo memória
     await browser.close();
   }
 }
