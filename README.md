@@ -85,7 +85,7 @@ To get a local copy up and running, follow these simple steps.
 
 ## 🎥 Project Demo
 
-![Project Demo in Action](https://raw.githubusercontent.com/guilh/amazon-scraper-challenge/main/demo/0808.gif)
+![Project Demo in Action](https://raw.githubusercontent.com/Guilherme-LTS/Amazon-Scraper-Challenge/refs/heads/main/demo/project-gif.gif)
 
 ---
 
