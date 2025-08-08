@@ -2,10 +2,10 @@ import { chromium } from 'playwright';
 
 export async function scrapeAmazon(keyword) {
   if (!keyword) {
-    throw new Error('Palavra-chave não pode ser vazia');
+    throw new Error('Keyword cannot be empty');
   }
 
-  // Voltando para headless: true para a versão final, rodando em segundo plano.
+  // Set headless: true for the final version, running in the background.
   const browser = await chromium.launch({ headless: true }); 
   try {
     const page = await browser.newPage({
@@ -21,7 +21,7 @@ export async function scrapeAmazon(keyword) {
 
     for (const element of productElements) {
       try {
-        // --- SELETORES FINAIS E CORRETOS ---
+        // --- FINAL & CORRECT SELECTORS ---
         const title = await element.locator('h2.a-text-normal').first().textContent({ timeout: 2000 });
         const imageUrl = await element.locator('img.s-image').first().getAttribute('src');
         
@@ -41,16 +41,18 @@ export async function scrapeAmazon(keyword) {
           products.push({ title, rating, numReviews, imageUrl });
         }
       } catch (e) {
-        // Ignora produtos que possam ter uma estrutura ligeiramente diferente ou são anúncios
+        // Ignore products that might have a slightly different structure or are ads.
       }
     }
 
     return products;
 
   } catch (error) {
-    console.error('Erro durante o scraping com Playwright:', error);
-    throw new Error('Falha ao obter dados da Amazon com Playwright.');
+    // Catch major errors (navigation failure, main timeout).
+    console.error('Error during Playwright scraping:', error);
+    throw new Error('Failed to fetch data from Amazon with Playwright.');
   } finally {
+    // Ensure the browser is always closed to prevent memory leaks.
     await browser.close();
   }
 }
