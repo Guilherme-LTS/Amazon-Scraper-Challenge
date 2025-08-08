@@ -1,7 +1,5 @@
 # Amazon Scraper Challenge 🚀
 
----
-
 ## 🎥 Project Demo
 
 ![Project Demo in Action](https://raw.githubusercontent.com/Guilherme-LTS/Amazon-Scraper-Challenge/refs/heads/main/demo/project-gif.gif)
