@@ -24,18 +24,6 @@ This project is a full-stack technical challenge designed to scrape product list
 
 ---
 
-### 🤔 A Note on the Tech Stack (Bun vs. Node.js)
-
-This project was initially developed using **Bun** as the JavaScript runtime, per the challenge's technical specification.
-
-During development, a critical compatibility issue was identified between the Bun runtime (v1.x) and the **Playwright** library on the Windows operating system. Specifically, Playwright's browser instance failed to launch, resulting in consistent `launch: Timeout` errors that could not be resolved through standard debugging (e.g., running in headful mode).
-
-After isolating the issue to the runtime environment, a pragmatic engineering decision was made to pivot the backend's execution environment to **Node.js**. This immediately resolved the incompatibility and allowed for the successful implementation of all required features.
-
-The project retains its `bun.lockb` file as evidence of the initial development path. This journey showcases a practical approach to problem-solving and adapting the tech stack to overcome roadblocks and ensure a stable, functional, and complete project delivery.
-
----
-
 ## 📂 Project Structure
 
 This project is organized as a monorepo with two primary directories:
@@ -92,5 +80,24 @@ To get a local copy up and running, follow these simple steps.
     * The application will be available at `http://localhost:5173` (or the port shown in the terminal).
 
 4.  **Access the application** in your browser using the frontend URL and start scraping!
+
+---
+
+## 🎥 Project Demo
+
+![Project Demo in Action](https://raw.githubusercontent.com/guilh/amazon-scraper-challenge/main/demo/0808.gif)
+
+---
+
+
+### 🤔 A Note on the Tech Stack (Bun vs. Node.js)
+
+This project was initially developed using **Bun** as the JavaScript runtime, per the challenge's technical specification.
+
+During development, a critical compatibility issue was identified between the Bun runtime (v1.x) and the **Playwright** library on the Windows operating system. Specifically, Playwright's browser instance failed to launch, resulting in consistent `launch: Timeout` errors that could not be resolved through standard debugging (e.g., running in headful mode).
+
+After isolating the issue to the runtime environment, a pragmatic engineering decision was made to pivot the backend's execution environment to **Node.js**. This immediately resolved the incompatibility and allowed for the successful implementation of all required features.
+
+The project retains its `bun.lockb` file as evidence of the initial development path. This journey showcases a practical approach to problem-solving and adapting the tech stack to overcome roadblocks and ensure a stable, functional, and complete project delivery.
 
 ---
