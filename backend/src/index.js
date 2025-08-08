@@ -1,41 +1,43 @@
 import express from 'express';
-import cors from 'cors'; // <-- 1. IMPORTE O PACOTE
+import cors from 'cors';
 import { scrapeAmazon } from './scraper.js';
 
-// 1. Inicialização
+// 1. Initialization
 const app = express();
 const PORT = 3000;
 
+// 2. Middleware Setup
+// Enable CORS to allow requests from the frontend
+app.use(cors()); 
 
-app.use(cors()); // <-- 2. USE O MIDDLEWARE
-
+// Enable the express app to parse JSON formatted request bodies
 app.use(express.json());
 
-// 3. Definição de Rotas
+// 3. Route Definitions
 app.get('/', (req, res) => {
-  res.send('<h1>Servidor do Scraper no ar!</h1><p>Use o endpoint /api/scrape?keyword=seu_termo para fazer a busca.</p>');
+  res.send('<h1>Scraper Server is running!</h1><p>Use the /api/scrape?keyword=your_term endpoint to start a search.</p>');
 });
 
 app.get('/api/scrape', async (req, res) => {
   const { keyword } = req.query;
 
   if (!keyword) {
-    return res.status(400).json({ error: 'O parâmetro "keyword" é obrigatório.' });
+    return res.status(400).json({ error: 'The "keyword" parameter is required.' });
   }
 
   try {
-    console.log(`Iniciando scraping para a palavra-chave: "${keyword}"`);
+    console.log(`Starting scrape for keyword: "${keyword}"`);
     const products = await scrapeAmazon(keyword);
-    console.log(`Scraping finalizado. ${products.length} produtos encontrados.`);
+    console.log(`Scraping finished. Found ${products.length} products.`);
     res.json(products);
 
   } catch (error) {
-    console.error('Erro na rota /api/scrape:', error);
+    console.error('Error in /api/scrape route:', error);
     res.status(500).json({ error: error.message });
   }
 });
 
-// 4. Iniciando o Servidor
+// 4. Start the Server
 app.listen(PORT, () => {
-  console.log(`Servidor rodando na porta ${PORT}. Acesse http://localhost:${PORT}`);
+  console.log(`Server running on port ${PORT}. Access http://localhost:${PORT}`);
 });
