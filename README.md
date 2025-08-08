@@ -1,6 +1,10 @@
 # Amazon Scraper Challenge 🚀
 
-**[➡️ View Live Demo]()**
+## 🎥 Project Demo
+
+![Project Demo in Action](https://raw.githubusercontent.com/Guilherme-LTS/Amazon-Scraper-Challenge/refs/heads/main/demo/project-gif.gif)
+
+---
 
 ## 📖 About The Project
 
@@ -80,12 +84,6 @@ To get a local copy up and running, follow these simple steps.
     * The application will be available at `http://localhost:5173` (or the port shown in the terminal).
 
 4.  **Access the application** in your browser using the frontend URL and start scraping!
-
----
-
-## 🎥 Project Demo
-
-![Project Demo in Action](https://raw.githubusercontent.com/Guilherme-LTS/Amazon-Scraper-Challenge/refs/heads/main/demo/project-gif.gif)
 
 ---
 
