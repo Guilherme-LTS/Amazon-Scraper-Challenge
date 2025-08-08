@@ -1,67 +1,67 @@
 import './style.css';
 
-// 1. SELEÇÃO DOS ELEMENTOS DO DOM
+// 1. DOM ELEMENT SELECTION
 const searchForm = document.querySelector('#search-form');
 const keywordInput = document.querySelector('#keyword-input');
 const resultsContainer = document.querySelector('#results-container');
 const loadingIndicator = document.querySelector('#loading');
 const errorMessageDiv = document.querySelector('#error-message');
 
-// 2. FUNÇÃO PRINCIPAL QUE LIDERA COM O ENVIO DO FORMULÁRIO
+// 2. MAIN FUNCTION TO HANDLE FORM SUBMISSION
 const handleSubmit = async (event) => {
-  // Previne o recarregamento padrão da página ao enviar um formulário
+  // Prevents the default page reload on form submission
   event.preventDefault(); 
   
   const keyword = keywordInput.value.trim();
   if (!keyword) {
-    renderError('Por favor, digite um termo para a busca.');
+    renderError('Please enter a search term.');
     return;
   }
 
-  // Prepara a UI para uma nova busca
+  // Prepare the UI for a new search
   showLoading(true);
   clearResultsAndErrors();
 
   try {
-    // 3. FAZ A CHAMADA À API DO BACKEND
+    // 3. MAKE THE API CALL TO THE BACKEND
     const response = await fetch(`http://localhost:3000/api/scrape?keyword=${encodeURIComponent(keyword)}`);
 
-    // Verifica se a resposta da rede foi bem-sucedida
+    // Check if the network response was successful
     if (!response.ok) {
       const errorData = await response.json();
-      // Lança um erro para ser pego pelo bloco catch
-      throw new Error(errorData.error || 'Ocorreu um erro no servidor.');
+      // Throws an error to be caught by the catch block
+      throw new Error(errorData.error || 'A server error occurred.');
     }
 
     const products = await response.json();
 
-    // 4. RENDERIZA OS RESULTADOS
+    // 4. RENDER THE RESULTS
     if (products.length === 0) {
-      renderError('Nenhum produto foi encontrado. Tente um termo diferente.');
+      renderError('No products found. Please try a different term.');
     } else {
       renderProducts(products);
     }
 
   } catch (error) {
-    // Captura erros de rede ou os erros que lançamos manualmente
-    console.error('Erro ao buscar dados:', error);
+    // Catches network errors or errors we threw manually
+    console.error('Error fetching data:', error);
     renderError(error.message);
   } finally {
-    // Garante que o indicador de "carregando" seja escondido no final
+    // Ensures the loading indicator is hidden at the end
     showLoading(false);
   }
 };
 
-// 5. FUNÇÕES AUXILIARES PARA MANIPULAR A UI
+// 5. UI HELPER FUNCTIONS
 
-// Limpa os resultados e mensagens de erro anteriores
+// Clears previous results and error messages
 function clearResultsAndErrors() {
   resultsContainer.innerHTML = '';
   errorMessageDiv.innerHTML = '';
   errorMessageDiv.classList.add('hidden');
 }
 
-// Controla a visibilidade do indicador de "carregando"
+// Controls the visibility of the loading indicator
 function showLoading(isLoading) {
   if (isLoading) {
     loadingIndicator.classList.remove('hidden');
@@ -70,20 +70,20 @@ function showLoading(isLoading) {
   }
 }
 
-// Mostra uma mensagem de erro na tela
+// Displays an error message on the screen
 function renderError(message) {
   errorMessageDiv.textContent = message;
   errorMessageDiv.classList.remove('hidden');
 }
 
-// Cria e insere os cards dos produtos na página
+// Creates and inserts the product cards into the page
 function renderProducts(products) {
   const productCards = products.map(product => `
     <div class="product-card">
       <img src="${product.imageUrl}" alt="${product.title}">
       <h3>${product.title}</h3>
       <div class="rating">
-        <span>⭐ ${product.rating} (${product.numReviews.toLocaleString('pt-BR')} reviews)</span>
+        <span>⭐ ${product.rating} (${product.numReviews.toLocaleString('en-US')} reviews)</span>
       </div>
     </div>
   `).join('');
@@ -91,5 +91,5 @@ function renderProducts(products) {
   resultsContainer.innerHTML = productCards;
 }
 
-// 6. ADICIONA O EVENT LISTENER AO FORMULÁRIO
+// 6. ADD THE EVENT LISTENER TO THE FORM
 searchForm.addEventListener('submit', handleSubmit);
